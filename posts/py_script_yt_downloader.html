@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+     <meta name="author" content="Kevin Marquesp"> 
+    
+     <meta name="keywords" content="python, hobby, tech, automate-yourself"> 
+     <meta name="description" content="Escrevi um script para extrair o
+áudio de vídeos do YouTube para eu baixar músicas usando o Termux roando
+um único arquivo."> 
+
+    <title>Script em Python para extrair o áudio de vídeos do YouTube</title>
+
+    
+          <link rel="stylesheet" href="../dist/css/article_theme.css">
+    
+    <script defer charset="utf-8">
+      ;(function() {
+        // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+        var selector = '.task-list > li > input[type="checkbox"]';
+        var checkboxes = document.querySelectorAll(selector);
+        Array.from(checkboxes).forEach((checkbox) => {
+          var wasChecked = checkbox.checked;
+          checkbox.disabled = false;
+          checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    
+    <header>
+      <h1 class="title">Script em Python para extrair o áudio de vídeos
+do YouTube</h1>
+      <blockquote class="metadata">
+
+                          <p class="author">
+                    Kevin Marquesp
+                </p>
+        
+                  <p class="date before-toc"><time datetime="22/06/2022">22/06/2022</time></p>
+              </blockquote>
+    </header>
+
+          <nav id="TOC" role="doc-toc">
+                  <a href="https://kevinmarquesp.github.io/blog">← Return</a><br>
+                <strong>Contents</strong><label for="contents">⊕</label>
+        <input type="checkbox" id="contents">
+        <ul>
+        <li><a
+        href="#porquê-eu-não-uso-um-aplicativo-aleatório-de-conversão"
+        id="toc-porquê-eu-não-uso-um-aplicativo-aleatório-de-conversão">Porquê
+        eu não uso um aplicativo aleatório de conversão</a>
+        <ul>
+        <li><a href="#vantagens-de-se-saber-programar"
+        id="toc-vantagens-de-se-saber-programar">Vantagens de se saber
+        programar</a></li>
+        </ul></li>
+        <li><a href="#como-eu-criei-essa-ferramenta"
+        id="toc-como-eu-criei-essa-ferramenta">Como eu criei essa
+        ferramenta</a>
+        <ul>
+        <li><a
+        href="#organização-desses-arquivos-e-como-eu-rodo-o-código"
+        id="toc-organização-desses-arquivos-e-como-eu-rodo-o-código">Organização
+        desses arquivos e como eu rodo o código</a></li>
+        </ul></li>
+        <li><a href="#contras-da-minha-solução"
+        id="toc-contras-da-minha-solução">Contras da minha solução…</a>
+        <ul>
+        <li><a href="#ainda-preciso-resolver-depois"
+        id="toc-ainda-preciso-resolver-depois">Ainda preciso resolver
+        depois</a></li>
+        </ul></li>
+        <li><a href="#python-code-documentation"
+        id="toc-python-code-documentation"><em>Python code
+        documentation</em></a>
+        <ul>
+        <li><a href="#usage" id="toc-usage"><em>Usage</em></a></li>
+        </ul></li>
+        </ul>
+      </nav>
+    
+    <main>
+      <p>Recentemente criei um script, usando a ferramenta <a
+      href="https://github.com/yt-dlp/yt-dlp"><code>yt-dlp</code></a> –
+      para Linux –, para baixar o áudio de vídeos do YouTube e
+      organizá-los em pastas específicas no meu celular/computador.
+      Apesar do projeto ser simples (é só um arquivo de umas 30 linhas),
+      aprendi algumas coisas interessantes e tive ideias que não acho
+      que seria legal não deixar elas registradas em algum canto.</p>
+      <p>Vou me atentar em registrar o que eu fiz, como eu fiz e porquê
+      eu fiz. Além disso, tem algumas coisas que preciso estudar mais
+      pra frente e coisas que não tem muito haver com código em si que
+      quero abordar.</p>
+      <h2
+      id="porquê-eu-não-uso-um-aplicativo-aleatório-de-conversão">Porquê
+      eu não uso um aplicativo aleatório de conversão</h2>
+      <p>Sites de conversão não me permitem ter a liberdade que eu teria
+      se usasse algum aplicativo para celular que fizesse o mesmo
+      serviço. Normalmente o navegador salva esses arquivos na pasta
+      <code>/emulated/0/Downloads/</code>, o que deixa o processo de
+      baixar o áudio dos vídeos bem mais trabalhoso, visto que eu teria
+      que mover manualmente os arquivos para as pastas onde guardo
+      minhas músicas, o trabalho seria muito maior se eu quisesse baixar
+      uma playlist inteira, e maior ainda para organizar.</p>
+      <p>Conheço poucos, mas com certeza há aplicativos que consigam
+      fazer tudo o que eu preciso, mas ainda acho que não seja uma boa
+      solução para o meu contexto. Não me entenda mal, eu entendo que
+      não há necessidade de reinventar a roda, mas achei que seria uma
+      boa oportunidade de aprender algo novo nessa questão. Outro motivo
+      de eu não usar usar aplicativos para Andorid: Eles não seguem a
+      <em>Unix philosophy</em><sup>1</sup>, o que não é algo ruim (longe
+      disso), mas só quer dizer que les fazem o que eu preciso e mais um
+      pouco, e esse “mais um pouco” acaba ocupando um espaço
+      desnecessário no meu armazenamento.</p>
+      <blockquote>
+      <p><strong>1.</strong> A <em>Unix philosophy</em> é uma filosofia
+      para desenvolver software que muitas aplicações para ambientes
+      <em>Unix-like</em> (tipo <em>Linux</em>, <em>MacOS</em>,
+      <em>BSD</em>, etc). Ela pode ser resumida em poucas palavras:
+      “Faça só uma coisa, e faça bem feita”.</p>
+      </blockquote>
+      <h3 id="vantagens-de-se-saber-programar">Vantagens de se saber
+      programar</h3>
+      <p>Outra razão de eu ter feito essa ferramenta: eu sei.
+      Lógicamente, eu não fiz o <code>yt-dlp</code>, apenas o usei para
+      baixar as músicas e extrair para MP3 e escrevi o script para
+      salvar onde eu quero. Estive estudando sobre como rodar comandos
+      em Shell por programas em Python e uso Linux – significa que sei
+      Shell porque sempre estou usando o terminal –, acabei conhecendo o
+      <code>yt-dlp</code> e aprendi a extrair o áudio em MP3 com ele.
+      Juntando uma linguagem simples como Python e essa ferramenta que é
+      executada por linha de comando, criei esse facilitador para mim
+      que gosta de escutar música offline.</p>
+      <p>O interessante foi que essa ideia surgiu quando pensei: “Putz,
+      acho que dava pra automatizar esse processo”. Programar é uma
+      skill que me ajuda muito a ser “preguiçoso”, no sentido de gastar
+      tempo e esforço para criar alguma coisa que repita um processo
+      várias vezes para mim.</p>
+      <h2 id="como-eu-criei-essa-ferramenta">Como eu criei essa
+      ferramenta</h2>
+      <p>Eu escolhi o Python pela facilidade, realmente foi um programa
+      que comecei a escrever segundos depois que pensei na solução para
+      o meu problema. Não só isso, como os sitemas Android e Arch Linux
+      (distribuição Linux que estou usando) são <em>Unix-like</em>, o
+      Python já vem pré-instalado – e se não vier, um siples comando
+      resolve em 5 segundos. Escolhi Python também por me permitir usar
+      essa função de executar comandos do sistema nativamente, o que me
+      permitiu escrever tudo em um único arquivo, aí eu só precisei me
+      preocupar com a lógica e como eu iria estruturar tudo.</p>
+      <p>Como você deve imaginar, esse aplicativo não têm interface
+      gráfica, você executa ele por linha de comando.</p>
+      <h3
+      id="organização-desses-arquivos-e-como-eu-rodo-o-código">Organização
+      desses arquivos e como eu rodo o código</h3>
+      <p>Uma vez com o script criado, precisei passar ele para o meu
+      celular e organizar tudo. Eu estou usando o <em>Termux</em> para
+      emular o terminal no Android, é com esse aplicativo que configuro
+      o meu ambiente pessoal de estudos (ou de desenvolvimento numa
+      emergência) e anotações.</p>
+      <p>A pasta <code>~/scripts/bin/</code> está no <code>$PATH</code>
+      do meu android, é lá onde guardo arquivos com permissão de
+      execução. Faço isso por que não preciso me preocupar com a
+      extensão do arquivo ou algo assim e fica mais fácil quando escrevo
+      algo realmente útil para o meu celular. Salvei o arquivo como
+      <code>yt</code>, ou seja, <code>~/scripts/bin/yt</code>, então só
+      preciso o dar o comando <code>yt</code> e ele começa a rodar.</p>
+      <p>No entanto, eu programei para a pasta de origem ser o diretório
+      atual, mas dá para editar isso passando o novo local do
+      <em>output</em> nos argumentos do comando – acredito que faça
+      sentido, já que a URL também vai ser passada como um argumento, e
+      será mais fácil de mudar o comportamento disso se necessário. Eu
+      sempre guardo minhas músicas em <code>/emulated/0/Musics/</code>,
+      então configurei meu <code>~/.bashrc</code> do seguinte modo:</p>
+      <div class="sourceCode" id="cb1"><pre
+      class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> yt=<span class="st">&quot;yt --dir /emulated/0/Musics&quot;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">alias</span> ytP=<span class="st">&quot;yt --playlist --dir /emulated/0/Musics&quot;</span></span></code></pre></div>
+      <p>O comando para baixar todos os vídeos de uma playlist salva os
+      vídeos em uma pasta separada. Com isso tudo, fica bem mais fácil o
+      trabalho de criar meus álbuns e organizar o que quero ouvir sem
+      depender do 4G que falha toda hora.</p>
+      <p>E como esse programa foi feita por mim, para resolver um
+      problema meu, não têm necessidade de ele ser incrível, afinal é só
+      um projeto pessoal afinal de contas. Um único arquivinho já basta,
+      não têm porquê colocar ele em algum repositório de pacotes grande
+      – tipo o do <code>pip</code> ou da AUR – e usar o
+      <code>yt-dlp</code> como dependência principal, o script só têm 70
+      linhas.</p>
+      <h2 id="contras-da-minha-solução">Contras da minha solução…</h2>
+      <p>É muito lento, apesar de não ser um problema pra mim, ainda é
+      meio chato. O <code>yt-dlp</code> precisa baixar o vídeo em
+      <code>WEBM</code> pra depois converter para MP3. Além disso, a
+      tela do meu celular precisa estar ligada para fazer o download – o
+      restante ele roda em background, e consegue converter para MP3 com
+      a tela desligada sem problemas –, e também acredito que o tamanho
+      dos arquivos sejam muito grandes. Não entendo muito como essas
+      coisas são formatadas, mas alguns áudios conseguem serm só alguns
+      MB mais leve, o que me incomoda.</p>
+      <p>Apesar disso tudo, estou satisfeito com o resultado. O tempo
+      entre eu copiar um link de um vídeo/playlist e eu ter as músicas
+      na pasta que eu quero pronto para o VLC (midia player que uso no
+      meu Android) tocar, ficou mais curto, mesmo com a demora no
+      download e na conversão. Sem falar que consegui, ao menos:</p>
+      <ul>
+      <li>Clean code com Python</li>
+      <li>Exercitei a minha skill pra solucionar problemas</li>
+      <li>Me divertir por um tempo</li>
+      <li>Me atualizar com Python, que já fazia um tempo que sequer
+      encostava</li>
+      </ul>
+      <p>Vou continuar usando isso e desse jeito até eu achar a solução
+      para esses problemas.</p>
+      <h3 id="ainda-preciso-resolver-depois">Ainda preciso resolver
+      depois</h3>
+      <ul class="task-list">
+      <li><input type="checkbox" disabled="" />
+      Encontrar um formato de compressão de áudio mais leve que MP3</li>
+      <li><input type="checkbox" disabled="" />
+      Ler melhor a documentação do <code>yt-dlp</code></li>
+      <li><input type="checkbox" disabled="" />
+      Escrever um script para limpar o nome dos
+      arquivos<sup>2</sup></li>
+      <li><input type="checkbox" disabled="" />
+      Treinar com esse projeto usando outras linguagens</li>
+      </ul>
+      <h2 id="python-code-documentation"><em>Python code
+      documentation</em></h2>
+      <p>Tentei organizar o código seguindo os <em>paterns</em> de
+      <em>clean code</em> que os <em>PyThOnIsTaS</em> costumam usar,
+      então acredito que esteja <em>self documentaded</em> o
+      sulficiente. Essa é a segunda versão do código, a primeira eu
+      tentave renomear o nome dos arquivos salvos e usava OOP, o que não
+      dá muito certo com Python num projeto pequeno, nessa versão eu
+      foquei em deixar o código legível e menos bloat.</p>
+      <p>E só por que sim, resolvi chamar o arquivo de
+      <code>better_yt-dlp.py</code>. Se for usar esse pequeno programa,
+      salve-o com um nome menos complicado, e numa pasta que esteja no
+      <em>path</em> do seu sistema operacional. A extensão do arquivo
+      não é necessária.</p>
+      <div class="sourceCode" id="cb2"><pre
+      class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env python3</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> os <span class="im">import</span> mkdir, system</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sys <span class="im">import</span> argv</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  DESC: Função para escrever mensagens em AZUL</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> __blue(msg: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&#39;</span><span class="ch">\033</span><span class="ss">[31m</span><span class="sc">{</span>msg<span class="sc">}</span><span class="ch">\033</span><span class="ss">[m&#39;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#  DESC: Função para escrever mensagens em VERMELHO</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> __red(msg: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="ss">f&#39;</span><span class="ch">\033</span><span class="ss">[34m</span><span class="sc">{</span>msg<span class="sc">}</span><span class="ch">\033</span><span class="ss">[m&#39;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#  INFO: Interrompe o programa e devolve a mensagem de erro</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> error_callback(error: <span class="pp">Exception</span>()) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(__red(<span class="st">&#39;😓 Argumentos inválidos... :/&#39;</span>))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> error</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#  INFO: Seleciona as informações relevantes dos argumentos e joga num dicionário</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_arguments() <span class="op">-&gt;</span> <span class="bu">dict</span>():</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    default_opts: <span class="bu">dict</span>() <span class="op">=</span> { <span class="st">&#39;playlist&#39;</span>: <span class="st">&#39;&#39;</span>, <span class="st">&#39;dir&#39;</span>: <span class="st">&#39;.&#39;</span>, <span class="st">&#39;video&#39;</span>: <span class="va">None</span> }</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    args: <span class="bu">list</span>(<span class="bu">str</span>) <span class="op">=</span> argv[<span class="dv">1</span>:]</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, value <span class="kw">in</span> <span class="bu">enumerate</span>(args):</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> value <span class="kw">in</span> [<span class="st">&#39;--playlist&#39;</span>, <span class="st">&#39;-p&#39;</span>]:</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            default_opts[<span class="st">&#39;playlist&#39;</span>] <span class="op">=</span> <span class="st">&#39;--no-flat-playlist&#39;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> value <span class="kw">in</span> [<span class="st">&#39;--dir&#39;</span>, <span class="st">&#39;-d&#39;</span>]:</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>                default_opts[<span class="st">&#39;dir&#39;</span>] <span class="op">=</span> args[key <span class="op">+</span> <span class="dv">1</span>]</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> error:</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>                error_callback(error)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="st">&#39;http://&#39;</span> <span class="kw">in</span> value <span class="kw">or</span> <span class="st">&#39;https://&#39;</span> <span class="kw">in</span> value:</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            default_opts[<span class="st">&#39;video&#39;</span>] <span class="op">=</span> value</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> default_opts[<span class="st">&#39;video&#39;</span>]:</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        error_callback(<span class="pp">Exception</span>(__blue(<span class="st">&#39;O vídeo não foi especificado nos argumentos&#39;</span>)))</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> default_opts</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#  DESC: Bloco principal do script</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    opts: <span class="bu">dict</span>() <span class="op">=</span> process_arguments()</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> opts[<span class="st">&#39;playlist&#39;</span>]:</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>        playlist_name: <span class="bu">str</span> <span class="op">=</span> <span class="bu">input</span>(__blue(<span class="st">&#39;Qual é o nome da playlist? 😎 &#39;</span>))</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>        opts[<span class="st">&#39;dir&#39;</span>] <span class="op">=</span> <span class="ss">f&#39;</span><span class="sc">{</span>opts[<span class="st">&quot;dir&quot;</span>]<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>playlist_name<span class="sc">}</span><span class="ss">&#39;</span></span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>            mkdir(opts[<span class="st">&#39;dir&#39;</span>])</span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> error:</span>
+<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>            error_callback(error)</span>
+<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>    system(<span class="ss">f&#39;cd </span><span class="sc">{</span>opts[<span class="st">&quot;dir&quot;</span>]<span class="sc">}</span><span class="ss">; yt-dlp </span><span class="sc">{</span>opts[<span class="st">&quot;playlist&quot;</span>]<span class="sc">}</span><span class="ss"> -x --audio-format mp3 </span><span class="sc">{</span>opts[<span class="st">&quot;video&quot;</span>]<span class="sc">}</span><span class="ss">&#39;</span>)</span>
+<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>    main()</span></code></pre></div>
+      <h3 id="usage"><em>Usage</em></h3>
+      <p>O ideal é você definir algum tipo de atalho para esses
+      comandos, para evitar de precisar escrever isso tudo sempre que
+      for baixar alguma música – o objetivo é ser rápido nesse sentido,
+      afinal. E acredito que você sempre vá querer baixar as músicas
+      sempre na mesma pasta, para manter organizado.</p>
+      <div class="sourceCode" id="cb3"><pre
+      class="sourceCode yml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">desc</span><span class="kw">:</span><span class="at"> Programinha simples para baixar música do YouTube.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">command</span><span class="kw">:</span><span class="at"> ./better_yt-dlp.py [--dir OUTPUT_PATH] [--playlist] VIDEO_URL</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">arguments</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">--playlist|-p</span><span class="kw">:</span><span class="at"> Salva todos os vídeos de uma playlist, mas pergunta o nome de uma nova pasta para salvá-las</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">--dir|-d OUTPUT_PATH</span><span class="kw">:</span><span class="at"> Pasta para salvar as músicas/playlists, o valor padrão é o diretório atual</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">VIDEO_URL</span><span class="kw">:</span><span class="at"> URL do(s) vídeo(s), é melhor passar entre aspas para evitar erros com o shell...</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">examples</span><span class="kw">:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ./better_yt-dlp.py &#39;https://youtube.com/SomeURL/&#39;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ./better_yt-dlp.py --playlist &#39;https://youtube.com/SomePlaylistURL/&#39;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> ./better_yt-dlp.py -p --dir ~/Musics  &#39;https://youtube.com/SomePlaylistURL/&#39;</span></span></code></pre></div>
+    </main>
+
+          <footer>
+        <p class="signoff">
+        <a href="https://kevinmarquesp.github.io/blog">← Return</a>
+        </p>
+      </footer>
+    
+      </body>
+</html>

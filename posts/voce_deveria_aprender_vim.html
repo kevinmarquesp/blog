@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+     <meta name="author" content="Kevin Marques"> 
+    
+     <meta name="keywords" content="hobby, vim, linux, tech, automate-yourself"> 
+     <meta name="description" content="Porquê você deveria dedicar um
+tempo para aprender a usar o Vim"> 
+
+    <title>Você deveria aprender VIM</title>
+
+    
+          <link rel="stylesheet" href="../dist/css/article_theme.css">
+    
+    <script defer charset="utf-8">
+      ;(function() {
+        // Non-essential if user has JavaScript off. Just makes checkboxes look nicer.
+        var selector = '.task-list > li > input[type="checkbox"]';
+        var checkboxes = document.querySelectorAll(selector);
+        Array.from(checkboxes).forEach((checkbox) => {
+          var wasChecked = checkbox.checked;
+          checkbox.disabled = false;
+          checkbox.addEventListener('click', (ev) => {ev.target.checked = wasChecked});
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    
+    <header>
+      <h1 class="title">Você deveria aprender VIM</h1>
+      <blockquote class="metadata">
+
+                          <p class="author">
+                    Kevin Marques
+                </p>
+        
+                  <p class="date before-toc"><time datetime="17/07/2022">17/07/2022</time></p>
+              </blockquote>
+    </header>
+
+          <nav id="TOC" role="doc-toc">
+                  <a href="https://kevinmarquesp.github.io/blog">← Return</a><br>
+                <strong>Contents</strong><label for="contents">⊕</label>
+        <input type="checkbox" id="contents">
+        <ul>
+        <li><a href="#o-que-o-vim-têm-de-tão-especial"
+        id="toc-o-que-o-vim-têm-de-tão-especial">O que o Vim têm de tão
+        especial</a>
+        <ul>
+        <li><a href="#customizações"
+        id="toc-customizações">Customizações!</a></li>
+        </ul></li>
+        <li><a href="#meu-workflow-com-o-vim"
+        id="toc-meu-workflow-com-o-vim">Meu workflow com o Vim</a>
+        <ul>
+        <li><a href="#configurações-gerais"
+        id="toc-configurações-gerais">Configurações gerais</a></li>
+        <li><a href="#meu-setup-sem-plugins"
+        id="toc-meu-setup-sem-plugins">Meu setup sem plugins</a>
+        <ul>
+        <li><a href="#fuzzy-file-search"
+        id="toc-fuzzy-file-search"><em>Fuzzy file search</em></a></li>
+        <li><a href="#autocomplete-suggestion"
+        id="toc-autocomplete-suggestion"><em>Autocomplete
+        suggestion</em></a></li>
+        <li><a href="#tag-jumping" id="toc-tag-jumping"><em>Tag
+        jumping</em></a></li>
+        </ul></li>
+        </ul></li>
+        <li><a href="#recomendações-de-sources"
+        id="toc-recomendações-de-sources">Recomendações de
+        sources</a></li>
+        </ul>
+      </nav>
+    
+    <main>
+      <p>Acredito que todos os que usam Linux, ou qualquer sistema
+      Unix-like, deveriam dedicar ao menos uma semana para aprender a
+      usar o Vim, principalmente se você está planejando construir sua
+      carreira na área de software. Apesar ter sido feito em 1991, esse
+      editor de texto ainda consegue me surpreender a cada dia que passa
+      por ele ser tão completo e <strong>fácil</strong> de usar.</p>
+      <p>Até quem usa o Atom, Sublime Text, VS Code — se não me engano,
+      até Notepad++ —, etc., estão começando a emular o comportamento do
+      VIM dentro desses editores com plugins feitos pela comunidade.
+      Talvez você já tenha visto um tutorial, ou feito algum curso, que
+      o cursor do editor dos vídeos se movimenta de uma forma estranha,
+      bem, vou tentar apresentar esse ponto pra você que não conhece
+      esse assunto e vou tentar trazer algumas dicas pra quem já usa o
+      Vim.</p>
+      <h2 id="o-que-o-vim-têm-de-tão-especial">O que o Vim têm de tão
+      especial</h2>
+      <p>Vou assumir que você ao menos tem alguma ideia do contexto
+      histórico de como o Vim foi criado, então vou pular para a
+      explicação do porque ele é um editor de texto lendário.</p>
+      <ol type="1">
+      <li>Ele é um editor que é feito para desenvolver, então ele têm
+      várias features que se assemelham com os editores de texto que
+      você talvez esteja acostumado a usar.</li>
+      <li>A ideia de navegar pelo seu texto no <strong>normal
+      mode</strong> e começar a inserir coisas no <strong>insert
+      mode</strong> é fenomenal, alguns dizem que no insert mode você
+      está mergulhando no arquivo que você está editando e no normal
+      mode você está na superfície, tendo uma visão geral de cada
+      elemento do texto.</li>
+      <li>Usar <code>hjkl</code> ao invés das setinhas do teclado são
+      mais ergonômicas, além do que, você não vai mais depender do mouse
+      para navegar pelo documento, você pode voltar com <code>{</code>
+      e<code>}</code> no modo normal se quiser pular pedaços grandes de
+      texto.</li>
+      <li>E o principal, ele é customizável…</li>
+      </ol>
+      <p>Desvantagens? Bem, a curva de aprendizado realmente é grande, e
+      você vai começar sendo super lento com os vários comandos e
+      atalhos que o Vim possuí, mas aprender qualquer coisa é assim
+      mesmo. Você começa devagar pra depois ficar rápida, eventualmente
+      você vai ser um daqueles que pensa “cara, por quê isso não têm
+      <em>[insira alguma feature do Vim aqui]</em>?”.</p>
+      <p>Isso leva tempo, e realmente só depende de você pesquisar e ler
+      a <a href="https://vimhelp.org/"><em>vim documentation</em></a> —
+      você pode também rodar o comando <code>:help</code> dentro do Vim
+      —, mas o esforço vale muito a pena.</p>
+      <h3 id="customizações">Customizações!</h3>
+      <p>Não estou brincando, acho que o Vim e o Neovim (que é uma
+      versão melhor do Vim, mas escrito em Lua e não em Vimscript) são
+      os pedaços de software mais customizáveis que já vi. Sempre que
+      você abre o Vim ele procura carregar um arquivo de configuração
+      dentro da sua <code>/home</code>, e é dentro dele que você pode
+      mudar o comportamento de <strong>tudo</strong> do editor. Para
+      começar a editar, você precisar fazer duas coisas: Abrir o arquivo
+      <code>~/.vimrc</code> — ou <code>~/.config/nvim/init.lua</code> se
+      você usa o Neovim —, e uma aba no seu navegador com o Google.
+      Depois disso é só se divertir usando o <strong>seu</strong>
+      editor.</p>
+      <p>Isso também é outra coisa interessante, cada configuração de
+      Vim no planeta é único, pois cada um tem suas necessidades e
+      preferências diferentes com as teclas que quer usar para editar. E
+      eu quero trazer um pouco da minha configuração do Vim.</p>
+      <h2 id="meu-workflow-com-o-vim">Meu workflow com o Vim</h2>
+      <p>Eu sei… Eu sei.. Plugins. Mas isso não conta, com plugins
+      qualquer editor consegue satisfazer qualquer um, então só vou
+      compartilhar as minhas customizações do Vim e não do Neovim (que é
+      o que estou usando para programar, por sinal, está cheio de
+      plugins).</p>
+      <h3 id="configurações-gerais">Configurações gerais</h3>
+      <pre class="vim"><code>&quot; Remove os ~ do final dos arquivos
+set fcs=eob:\
+&quot; Usa syntaxe dos arquivos de wiki do vim para arquivos .txt
+au BufWinEnter *.txt set ft=help
+&quot; Minha tecla leader para rodar alguns mappings customizados
+let mapleader=&quot;\&lt;space&gt;&quot;
+
+&quot; Setup inicial para algumas features funcionarem sem plugins
+set nocompatible
+filetype plugin on
+syntax enable</code></pre>
+      <h3 id="meu-setup-sem-plugins">Meu setup sem plugins</h3>
+      <h4 id="fuzzy-file-search"><em>Fuzzy file search</em></h4>
+      <p>Essa variável, <code>paht</code>, guarda o caminho das pastas
+      que o Vim pode abrir, adicionando <code>**</code> à ela, podemos
+      usar o <code>:find</code> para procurar todos os arquivos em todos
+      os diretórios e subdiretórios da pasta que o Vim foi aberto.
+      Detalhe: Eu removi as pastas que se chamem <em>node_modules</em>
+      por eu trabalhar muito com JavaScript.</p>
+      <pre class="vim"><code>set path+=**
+set path-=**/node_modules/**
+
+set wildmenu
+nnoremap &lt;leader&gt;FF :find ./**/</code></pre>
+      <h4 id="autocomplete-suggestion"><em>Autocomplete
+      suggestion</em></h4>
+      <p>Essa feature já é embutida no Vim por padrão, use
+      <code>&lt;c-n&gt;</code> no insert mode para ativá-la. Mas eu
+      adicionei algumas keys para ela se ativar sozinha com alguns
+      caracteres, note que se eu digitar <code>/</code> ele abre uma
+      janela com todos os arquivos que ele encontrar nesse path.</p>
+      <pre class="vim"><code>&quot; O &lt;c-p&gt; volta o cursor para a linha que estou editando
+inoremap / /&lt;c-x&gt;&lt;c-f&gt;&lt;c-p&gt;
+inoremap . .&lt;c-n&gt;&lt;c-p&gt;</code></pre>
+      <h4 id="tag-jumping"><em>Tag jumping</em></h4>
+      <p>Essa é a feature mais poderosa que eu conheço do Vim, em
+      resumo, você pode simular a função de <em>jump to definition</em>
+      apertando <code>^]</code> em cima de uma implementação de uma
+      função. Por exemplo, se eu estiver com o cursor em cima de
+      <code>foo()</code>, ele vai direto pra linha (e arquivo) onde
+      <code>foo()</code> foi definido — por exemplo
+      <code>func foo() string {</code>. E você pode voltar na stack com
+      <code>&lt;c-t&gt;</code></p>
+      <p>Mas pra isso, o Vim lê um arquivo chamado <code>tags</code> na
+      raiz do projeto que você abriu, e para gerar esse arquivo você
+      precisa da ferramenta <code>ctags</code>, eu implementei isso no
+      meu Vim para eu não precisar ficar trocando entre editor,
+      terminal, editor, terminal…</p>
+      <pre class="vim"><code>command! MakeTags !ctags -R --exclude=.git --exclude=node_modules --exclude=test .</code></pre>
+      <h2 id="recomendações-de-sources">Recomendações de sources</h2>
+      <p>Muito obrigado por ler o meu artigo, espero ter ajudado. Mas
+      antes de acabar, eu quero listar alguns links que me ajudaram
+      muito.</p>
+      <ul>
+      <li><a href="https://vimhelp.org/">https://vimhelp.org/</a></li>
+      <li><a
+      href="https://www.youtube.com/playlist?list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ">https://www.youtube.com/playlist?list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ</a></li>
+      <li><a
+      href="https://www.youtube.com/watch?v=XA2WjJbmmoM&amp;ab_channel=thoughtbot">https://www.youtube.com/watch?v=XA2WjJbmmoM&amp;ab_channel=thoughtbot</a></li>
+      </ul>
+      <p>E, claro, meus <em>dotfiles</em> do Neovim e o do Vim:</p>
+      <ul>
+      <li>Neovim: <a
+      href="https://gitlab.com/m10769/nvim">https://gitlab.com/m10769/nvim</a></li>
+      <li>Vimrc: <a
+      href="https://gitlab.com/m10769/nvim/-/blob/main/.vimrc">https://gitlab.com/m10769/nvim/-/blob/main/.vimrc</a></li>
+      </ul>
+    </main>
+
+          <footer>
+        <p class="signoff">
+        <a href="https://kevinmarquesp.github.io/blog">← Return</a>
+        </p>
+      </footer>
+    
+      </body>
+</html>
