@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Mono&display=swap");
+
 /* ----- Global settings ----------------------------------------------- {{{ */
 
 :root {
@@ -17,6 +20,7 @@
   --highlight-purple: #b4a7d6;
 
   --color-inline-code: #1b2733;
+  --color-code: #143F6B;
   --color-inline-code-bg: #f3f3f8;
 
   --color-border: #dfdfd0;
@@ -26,9 +30,9 @@
 
   /* --- Text --- */
 
-  --font-family-prose: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
-  --font-family-heading: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
-  --font-family-code: Menlo, monospace;
+  --font-family-prose: "Nunito Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+  --font-family-heading: "Nunito Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+  --font-family-code: "PT Mono", Menlo, monospace;
   --side-note-number-font-family: var(--font-family-prose);
 
   --line-height: 26px;
@@ -103,14 +107,28 @@
    * change to do so was made in a backwards-compatible way, so the variable
    * was not renamed.)
    **/
-  --main-width-narrow: 550px;
-  --side-note-max-width: 300px;
+--main-width-narrow: 550px;
+--side-note-max-width: 300px;
 
+}
+
+::-webkit-scrollbar {
+  height: .3rem;
+  width: .3rem;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #161313;
+    --background-color: #000;
 
     --color-text: #f7f5f2;
     --color-text-secondary: #9d9b99;
@@ -124,12 +142,27 @@
     --highlight-purple: #351c75;
 
     --color-inline-code: #f7f5f2;
+    --color-code: hsl(100, 62%, 80%);
     --color-inline-code-bg: #242121;
 
     --color-border: #393635;
     --color-border-heavy: #524f4d;
 
     --color-table-heading: #242121;
+  }
+
+  ::-webkit-scrollbar {
+    height: .3rem;
+    width: .3rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: black;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: white;
+    border-radius: 10px;
   }
 }
 
@@ -145,6 +178,7 @@
 html {
   /* https://github.com/edwardtufte/tufte-css/issues/81#issuecomment-261953409 */
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -221,9 +255,9 @@ sup {
 
   /* Mimic 'vertical-align: super' (browser style for sup tag)
    * without causing a gap in our text's implicit grid. */
-  vertical-align: baseline;
-  position: relative;
-  top: var(--side-note-sup-offset);
+vertical-align: baseline;
+position: relative;
+top: var(--side-note-sup-offset);
 }
 
 sup {
@@ -239,13 +273,13 @@ sup {
 /* --- Side note input controls --- {{{ */
 
 input.margin-toggle {
-    display: none;
+  display: none;
 }
 label.margin-toggle:not(.sidenote-number) {
-    display: none;
+  display: none;
 }
 label.sidenote-number {
-    display: inline;
+  display: inline;
 }
 
 /* Unfortunately, variables aren't in scope here.
@@ -499,13 +533,19 @@ pre code {
   border-radius: initial;
 }
 
+pre {
+  overflow-y: hidden;
+  overflow-x: scroll;
+  color: var(--color-code)
+}
+
 pre > code {
   position: relative; /* For line highlights */
   display: inline-block;
   min-width: 100%;
   z-index: 1;
 
-  white-space: pre-wrap;
+  /* white-space: pre-wrap; */
 
   padding: 0 var(--code-block-side-padding);
 }
@@ -520,9 +560,9 @@ code.sourceCode::selection {
   transform: translateZ(0px);
 }
 
-.wide pre > code {
-  white-space: pre;
-}
+/* .wide pre > code { */
+/*   white-space: pre; */
+/* } */
 
 pre.numberSource code {
   counter-reset: source-line 0;
