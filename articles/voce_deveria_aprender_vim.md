@@ -1,4 +1,5 @@
 ---
+title-prefix: Post
 title: Você deveria aprender VIM
 author: Kevin Marques
 date: 17/07/2022
@@ -10,8 +11,6 @@ keywords:
 - tech
 - automate-yourself
 return-url: https://kevinmarquesp.github.io/blog
-header-includes:
-- '<link rel="stylesheet" href="../dist/css/article_theme.css">'
 ---
 
 

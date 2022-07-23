@@ -1,6 +1,7 @@
 ---
+title-prefix: Post
 title: Script em Python para extrair o áudio de vídeos do YouTube
-author: Kevin Marquesp
+author: Kevin Marques
 date: 22/06/2022
 description-meta: Escrevi um script para extrair o áudio de vídeos do YouTube para eu baixar músicas usando o Termux roando um único arquivo.
 keywords:
@@ -9,8 +10,6 @@ keywords:
 - tech
 - automate-yourself
 return-url: https://kevinmarquesp.github.io/blog
-header-includes:
-- '<link rel="stylesheet" href="../dist/css/article_theme.css">'
 ---
 
 
@@ -23,9 +22,9 @@ Vou me atentar em registrar o que eu fiz, como eu fiz e porquê eu fiz. Além di
 
 Sites de conversão não me permitem ter a liberdade que eu teria se usasse algum aplicativo para celular que fizesse o mesmo serviço. Normalmente o navegador salva esses arquivos na pasta `/emulated/0/Downloads/`, o que deixa o processo de baixar o áudio dos vídeos bem mais trabalhoso, visto que eu teria que mover manualmente os arquivos para as pastas onde guardo minhas músicas, o trabalho seria muito maior se eu quisesse baixar uma playlist inteira, e maior ainda para organizar.
 
-Conheço poucos, mas com certeza há aplicativos que consigam fazer tudo o que eu preciso, mas ainda acho que não seja uma boa solução para o meu contexto. Não me entenda mal, eu entendo que não há necessidade de reinventar a roda, mas achei que seria uma boa oportunidade de aprender algo novo nessa questão. Outro motivo de eu não usar usar aplicativos para Andorid: Eles não seguem a *Unix philosophy*<sup>1</sup>, o que não é algo ruim (longe disso), mas só quer dizer que les fazem o que eu preciso e mais um pouco, e esse "mais um pouco" acaba ocupando um espaço desnecessário no meu armazenamento.
+Conheço poucos, mas com certeza há aplicativos que consigam fazer tudo o que eu preciso, mas ainda acho que não seja uma boa solução para o meu contexto. Não me entenda mal, eu entendo que não há necessidade de reinventar a roda, mas achei que seria uma boa oportunidade de aprender algo novo nessa questão. Outro motivo de eu não usar usar aplicativos para Andorid: Eles não seguem a *Unix philosophy*[^1], o que não é algo ruim (longe disso), mas só quer dizer que les fazem o que eu preciso e mais um pouco, e esse "mais um pouco" acaba ocupando um espaço desnecessário no meu armazenamento.
 
-> **1.** A *Unix philosophy* é uma filosofia para desenvolver software que muitas aplicações para ambientes *Unix-like* (tipo *Linux*, *MacOS*, *BSD*, etc). Ela pode ser resumida em poucas palavras: "Faça só uma coisa, e faça bem feita".
+[^1]: A *Unix philosophy* é uma filosofia para desenvolver software que muitas aplicações para ambientes *Unix-like* (tipo *Linux*, *MacOS*, *BSD*, etc). Ela pode ser resumida em poucas palavras: "Faça só uma coisa, e faça bem feita".
 
 
 ### Vantagens de se saber programar
