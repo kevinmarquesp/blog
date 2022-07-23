@@ -1,0 +1,57 @@
+#!/usr/bin/env sh 
+
+ARTICLES_PATH="articles"
+POSTS_PATH="posts"
+
+INDEX_TEMPLATE="template/index_template.md"
+POST_TEMPLATE="template/blog_post.html"
+
+
+function update_index() {
+    cp $INDEX_TEMPLATE tmp.md
+    python gen_posts_list.py >> tmp.md
+
+    pandoc -s tmp.md -c none      \
+        --template $POST_TEMPLATE \
+        --filter pandoc-sidenote  \
+        --toc --toc-depth=6       \
+        -o index.html
+
+    rm tmp.md
+}
+
+
+case $1 in
+    file | f) # Compile a file given in command arguments
+        HTML_OUTPUT="$(basename $2 | cut -d. -f1).html"
+
+        pandoc -s $2 -c none          \
+            --template $POST_TEMPLATE \
+            --filter pandoc-sidenote  \
+            --toc --toc-depth=6       \
+            -o $POSTS_PATH/$HTML_OUTPUT
+
+        update_index
+        exit 0
+    ;;
+
+    all | a) # Compile all files inside articles directory
+        for file in $ARTICLES_PATH/*; do
+            HTML_OUTPUT="$(basename $file | cut -d. -f1).html"
+
+            pandoc -s $file -c none       \
+                --template $POST_TEMPLATE \
+                --filter pandoc-sidenote  \
+                --toc --toc-depth=6       \
+                -o $POSTS_PATH/$HTML_OUTPUT
+        done
+
+        update_index
+        exit 0
+    ;;
+
+    index | i) # Update the index pages with the posts list
+        update_index
+        exit 0
+    ;;
+esac
